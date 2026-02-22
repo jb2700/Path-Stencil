@@ -186,8 +186,8 @@ void aTrousWavelet(std::vector<RenderResult>& r_res, int width, int height) {
 // add stratified + low discrepency sampling
 void PathTracer::traceScene(QRgb *imageData, const Scene& scene)
 {
-    std::string scene_name = "test10";
-    bool is_ground_truth = (settings.samplesPerPixel > 128);
+    // std::string scene_name = "test10";
+    // bool is_ground_truth = (settings.samplesPerPixel > 128);
     std::vector<Vector3f> intensityValues(m_width * m_height, Vector3f(0,0,0));
     Matrix4f invViewMat = (scene.getCamera().getScaleMatrix() * scene.getCamera().getViewMatrix()).inverse();
 
@@ -240,31 +240,31 @@ void PathTracer::traceScene(QRgb *imageData, const Scene& scene)
     //     intensityValues[i] = r_res[i].radiance;
     // }
     // data export
-    auto save_binary = [&](std::string suffix, auto extractor) {
-        std::string folder = (!is_ground_truth) ? "train_data/" : "test_data/";
-        std::string filename = folder + scene_name + suffix + ".bin";
-        std::ofstream out(filename, std::ios::binary);
-        for(const auto& res : r_res) {
-            auto val = extractor(res);
-            out.write(reinterpret_cast<const char*>(&val), sizeof(val));
-        }
-        out.close();
-    };
+    // auto save_binary = [&](std::string suffix, auto extractor) {
+    //     std::string folder = (!is_ground_truth) ? "train_data/" : "test_data/";
+    //     std::string filename = folder + scene_name + suffix + ".bin";
+    //     std::ofstream out(filename, std::ios::binary);
+    //     for(const auto& res : r_res) {
+    //         auto val = extractor(res);
+    //         out.write(reinterpret_cast<const char*>(&val), sizeof(val));
+    //     }
+    //     out.close();
+    // };
 
-    if (is_ground_truth) {
-        save_binary("_gt", [](const RenderResult& r) { return r.radiance; });
-    } else {
-        save_binary("_noisy", [](const RenderResult& r) { return r.radiance; });
-        save_binary("_normal", [](const RenderResult& r) { return r.normal; });
-        save_binary("_depth", [](const RenderResult& r) { return r.depth; });
-    }
+    // if (is_ground_truth) {
+    //     save_binary("_gt", [](const RenderResult& r) { return r.radiance; });
+    // } else {
+    //     save_binary("_noisy", [](const RenderResult& r) { return r.radiance; });
+    //     save_binary("_normal", [](const RenderResult& r) { return r.normal; });
+    //     save_binary("_depth", [](const RenderResult& r) { return r.depth; });
+    // }
 
     // if (!is_ground_truth) {
     //     save_binary("_atrous", [](const RenderResult& r) { return r.radiance; });
     // }
-    if (!is_ground_truth) {
-        aTrousWavelet(r_res, m_width, m_height);
-    }
+    // if (!is_ground_truth) {
+    //     aTrousWavelet(r_res, m_width, m_height);
+    // }
     toneMap(imageData, intensityValues);
 }
 
