@@ -203,6 +203,11 @@ void PathTracer::traceScene(QRgb *imageData, const Scene& scene)
             for(int s = 0; s < samplesPerPixel; ++s) {
                 float jitterX = x + (getRandom() - 0.5f);
                 float jitterY = y + (getRandom() - 0.5f);
+                // float ldsX = vanDerCorput(s, 2);
+                // float ldsY = vanDerCorput(s, 3);
+
+                // float jitterX = x + ldsX - 0.5f;
+                // float jitterY = y + ldsY - 0.5f;
                 RenderResult res = tracePixel(jitterX, jitterY, scene, invViewMat);
                 // if (s == 0) {
                 //     r_res[x + (y * m_width)].albedo = res.albedo;
@@ -229,12 +234,13 @@ void PathTracer::traceScene(QRgb *imageData, const Scene& scene)
             //         float jitterX = x + (p + getRandom()) * invN - 0.5f;
             //         float jitterY = y + (q + getRandom()) * invN - 0.5f;
 
-            //         accumulatedRadiance += tracePixel(jitterX, jitterY, scene, invViewMat);
+            //         accumulatedRadiance += tracePixel(jitterX, jitterY, scene, invViewMat).radiance;
             //     }
             // }
             // intensityValues[x + (y * m_width)] = accumulatedRadiance / (float)(n * n);
         }
     }
+    // fixed function sampling
     // aTrousWavelet(r_res, m_width, m_height);
     // for (int i = 0; i < r_res.size(); i++) {
     //     intensityValues[i] = r_res[i].radiance;
@@ -437,23 +443,23 @@ Vector3f PathTracer::traceRay(const Ray& r, const Scene& scene, bool count_emitt
                 }
 
                 // Beer's law
-                // Vector3f attenuation(1.0f, 1.0f, 1.0f);
-                // if (!entering) {
-                //     float dist = (p.hit - r.o).norm();
+                Vector3f attenuation(1.0f, 1.0f, 1.0f);
+                if (!entering) {
+                    float dist = (p.hit - r.o).norm();
 
                     // red
                     // Vector3f absorption(0.1f, 4.0f, 4.0f);
 
                     // green
-                    // Vector3f absorption(1.5f, 0.2f, 1.2f);
+                    Vector3f absorption(1.5f, 0.0f, 0.0f);
 
                     // blue
                     // Vector3f absorption(0.2f, 0.05f, 0.01f);
 
-                //     attenuation.x() = std::exp(-absorption[0] * dist);
-                //     attenuation.y() = std::exp(-absorption[1] * dist);
-                //     attenuation.z() = std::exp(-absorption[2] * dist);
-                // }
+                    attenuation.x() = std::exp(-absorption[0] * dist);
+                    attenuation.y() = std::exp(-absorption[1] * dist);
+                    attenuation.z() = std::exp(-absorption[2] * dist);
+                }
 
                 Ray nextRay(p.hit + (orienting_N * 0.0001f * offset_multiplier), nextDir);
 

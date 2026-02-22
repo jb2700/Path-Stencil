@@ -33,25 +33,54 @@ Please do not attempt to duplicate the given reference images; we have tools to 
 
 Please link to the lines (in GitHub) where the implementation of these features start:
 
-- [Diffuse Reflection]()
-- [Glossy Reflection]()
-- [Mirror Reflection]()
-- [Refraction (with Fresnel refletion)]()
-- [Soft Shadows]()
-- [Illumination]()
-- [Russian Roulette path termination]()
-- [Event Splitting]()
-- [Tone Mapping]()
+- [Diffuse Reflection]() -> pathtracer.c++ lines 469 to 504
+- [Glossy Reflection]() -> pathtracer.c++ lines 469 to 504
+- [Mirror Reflection]() -> pathtracer.c++ lines 405 to 410
+- [Refraction (with Fresnel refletion)]() -> pathtracer.c++ lines 411 to 466
+- [Soft Shadows]() -> pathtracer.c++ lines 281 to 360
+- [Illumination]() -> pathtracer.c++ lines 281 to 360 or 544 to 591
+- [Russian Roulette path termination]() -> pathtracer.c++ line 404
+- [Event Splitting]() -> pathtracer.c++ lines 281 to 360 and 397 to 400
+- [Tone Mapping]() -> pathtracer.c++ 544 to 591
+- [Stratified Sampling]() -> pathtracer.c++ 228 to 240
+- [Fixed function denoising]() -> pathtracer.c++ 70 to 185
+- [Learned denoising]() -> model.py and test_data, train_data folders
+- [Low discrepancy sampling]() -> pathtracer.c++ 37 to 50
+- [Attenuate refracted paths]() -> pathtracer.c++ 445 to 462
 - Any extra features
 
 ### Design Choices
 
 Please list all the features your path tracer implements.
 
+Diffuse, Glossy, Mirror reflection, Refraction (with Fresnel reflection), Soft shadows, illumination, tone mapping, event splitting, stratified sampling, fixed function denoising, learned denoising, low discrepancy sampling, attentuate refracted paths. 
+
 ### Extra Features
 
 Briefly explain your implementation of any extra features, provide output images, and describe what each image demonstrates.
 
+Here is the fixed function denoising. I using 50 samples per pixel for both outputs, the first one is without fixed function and the second picture is with fixed function denoising. As you see there is a big difference and it is more smooth:
+
+![](student_outputs/final/cornell_box_full_lighting.png) | ![](student_outputs/extra/cornell_box_full_lighting.png)
+
+Here is my stratified sampling (left is stratified right is normal):
+
+![](student_outputs/extra/cornell_box_full_lighting_strat.png) | ![](student_outputs/extra/cornell_box_full_lighting_strat_norm.png)
+
+Here is my Learned Denoising:
+
+![](scene01_learned.png) | ![](student_outputs/extra/cornell_box_full_lighting_noisy.png)
+
+Here is my low discrepancy sampling:
+
+![](student_outputs/extra/cornell_box_full_lighting_disc.png) | ![](student_outputs/extra/cornell_box_full_lighting_strat_norm.png)
+
+Here is my refracted paths:
+
+![](student_outputs/final/refraction.png) | ![](student_outputs/extra/refraction_new.png)
+
 ### Collaboration/References
 
 ### Known Bugs
+
+My light is slightly brighter than the reference light and I am not sure why that is the case. Also for my learned denoising I really tried hard to get it to work by generating my own testing sets from the testing files we had. Then I made my own architecture and tested many parameters and some changes but none of them fully worked with my training data. 
