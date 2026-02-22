@@ -4,6 +4,8 @@
 #include <cmath>
 #include <BVH/Object.h>
 
+#include <iostream>
+
 #include <Eigen/Dense>
 
 //! For the purposes of demonstrating the BVH, a simple sphere
@@ -35,6 +37,8 @@ struct Sphere : public Object {
     // Assume we are not in a sphere... The first hit is the lesser valued
     I->object = this;
     I->t = sd - sqrt(disc);
+    // I->hit = ray.o + ray.d * I->t;
+    std::cout << "I AM IN SPHERE INTERSECTION" << std::endl;
     return true;
   }
 
@@ -49,6 +53,7 @@ struct Sphere : public Object {
   }
 
   Eigen::Vector3f getCentroid() const override {
+      std::cout << "I AM IN SPHERE Centroid" << std::endl;
     return center;
   }
 

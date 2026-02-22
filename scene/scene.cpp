@@ -56,6 +56,7 @@ bool Scene::load(QString filename, Scene **scenePointer, float imageWidth, float
         parser.getLightData(i, lightData);
         scene->addLight(lightData);
     }
+    // std::cout << "in the scene load: " << parser.getNumLights() << std::endl;
 
     QFileInfo info(filename);
     QString dir = info.path();
@@ -261,7 +262,7 @@ void Scene::addLight(const SceneLightData &data)
     m_lights.push_back(data);
 }
 
-const std::vector<SceneLightData> &Scene::getLights()
+const std::vector<SceneLightData> &Scene::getLights() const
 {
     return m_lights;
 }

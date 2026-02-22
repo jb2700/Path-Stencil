@@ -130,10 +130,12 @@ bool XmlSceneParser::parse() {
     QDomNode childNode = scenefile.firstChild();
     while (!childNode.isNull()) {
         QDomElement e = childNode.toElement();
+        std::cout << e.tagName().toStdString() << std::endl;
         if (e.tagName() == "globaldata") {
             if (!parseGlobalData(e))
                 return false;
         } else if (e.tagName() == "lightdata") {
+            std::cout << "parsing light!!!!!!!!!!!!!!!!!!!!" << std::endl;
             if (!parseLightData(e))
                 return false;
         } else if (e.tagName() == "cameradata") {
@@ -336,6 +338,8 @@ bool XmlSceneParser::parseLightData(const QDomElement &lightdata) {
     light->dir = Eigen::Vector4f(0.f, 0.f, 0.f, 0.f);
     light->color(0) = light->color(1) = light->color(2) = 1;
     light->function = Eigen::Vector3f(1, 0, 0);
+
+    std::cout << "here is the parse light data: " << m_lights.size() << std::endl;
 
     // Iterate over child elements
     QDomNode childNode = lightdata.firstChild();
